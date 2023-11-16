@@ -1,101 +1,100 @@
-import { useState } from 'react';
+//selection и в css 86 строка
 import styles from './App.module.css';
+import { useState } from 'react';
 
 export const App = () => {
-	const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+	const NUMS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
 
 	const [value, setValue] = useState(0);
-	const [resultRender, setResultRender] = useState(true);
+	const [isResult, setIsResult] = useState(false);
 
-	const countResult = (userPression) => {
-		if (userPression.length) {
-			const actions = userPression
+	const countResult = (countResult) => {
+		if (countResult.length) {
+
+			const selection = countResult
 				.split(' ')
 				.filter((symbol) => isFinite(symbol) === false);
 
-			const ceilNumbers = userPression
+				const operand = countResult
 				.split(' ')
 				.filter((symbol) => isFinite(symbol) === true)
 				.map((number) => Number(number));
 
-			actions.forEach((act) => {
-				if (act === '-') {
-					const result = ceilNumbers[0] - ceilNumbers[1];
-					ceilNumbers.splice(0, 2, result);
+				selection.forEach((select) => {
+				if (select === '-') {
+					const result = operand[0] - operand[1];
+					operand.splice(0, 2, result);
 				} else {
-					const result = ceilNumbers[0] + ceilNumbers[1];
-					ceilNumbers.splice(0, 2, result);
+					const result = operand[0] + operand[1];
+					operand.splice(0, 2, result);
 				}
 			});
 
-			setResultRender(resultRender ? null : !resultRender);
-			return ceilNumbers[0];
+			setIsResult(isResult ? false : !isResult);
+			return operand[0];
 		} else {
-			setResultRender(resultRender ? !resultRender : null);
+			setIsResult(isResult ? !isResult : false);
 			return 0;
 		}
 	};
 
 	const addDigit = (event) => {
 		const li = event.target.closest('li');
+
 		if (li) {
-			setResultRender(resultRender ? !resultRender : null);
+			setIsResult(isResult ? !isResult : false);
 			setValue((updatedValue) =>
 				updatedValue === 0 ? li.textContent : (updatedValue += li.textContent),
 			);
 		}
-	};
+	}
 
-	const doCalc = (event) => {
-		const act = event.target.closest('li');
-		if (act.textContent !== '=') {
-			setResultRender(resultRender ? !resultRender : null);
-			setValue(
-				act.textContent === '+'
-					? `${value} + `
-					: act.textContent === '-'
-					? `${value} - `
-					: act.textContent === 'C'
-					? 0
-					: '',
-			);
-		} else if (act.textContent === '=') {
-			setValue(() => countResult(value));
-		}
-	};
+	const doOperation = (event) => {
+		const select = event.target.closest('li');
+						if (select.textContent !== '=') {
+							setIsResult(isResult ? !isResult : false);
+							setValue(
+								select.textContent === '-'
+									? `${value} - `
+									: select.textContent === '+'
+									? `${value} + `
+									: select.textContent === 'C'
+									? 0
+									: null,
+							);
+						} else if (select.textContent === '=') {
+							setValue(() => countResult(value));
+						}
+	}
 
 	return (
 		<div className={styles.сontainer}>
-			<div className={resultRender ? styles.result : styles.screen}>{value}</div>
+			<div className={isResult ? styles.result : styles.screen}>{value}</div>
 			<div className={styles.gridContainer}>
 				<ul
 					className={styles.numbers}
-					onClick={(evt) => {
-						addDigit(evt);
-					}}
+					onClick={(evt) => {addDigit(evt)}}
 				>
-					{numbers.map((number) => (
+					{NUMS.map((number) => (
 						<li className={styles.li} key={number}>
 							{number}
 						</li>
 					))}
 				</ul>
 				<ul
-					className={styles.actions}
-					onClick={(evt) => {
-						doCalc(evt);
-					}}
+					className={styles.actions} //selection и в css
+					onClick={(evt) => {doOperation(evt)}}
 				>
-					<li className={styles.li} key="+">
+					<li className={styles.li} key="operator">
 						-
 					</li>
-					<li className={styles.li} key="-">
+					<li className={styles.li} key="operator">
 						+
 					</li>
-					<li className={styles.li} key="=">
+					<li className={styles.li} key="operator">
 						=
 					</li>
-					<li className={styles.li} key="C">
+					<li className={styles.li} key="operator">
 						C
 					</li>
 				</ul>
@@ -103,34 +102,3 @@ export const App = () => {
 		</div>
 	);
 };
-
-// import logo from './logo.svg';
-// import { MyComponent } from './MyComponent';
-// import './App.css';
-
-// // const today = new Date(); //
-
-// export const App = () => {
-// 	return (
-// 		<div className="App">
-// 			<header className="App-header">
-// 				<img src={logo} className="App-logo" alt="logo" />
-// 				<p>
-// 					Сложение <code></code> and вычитание
-// 				</p>
-// 				<a
-// 					className="App-link"
-// 					href="https://reactjs.org"
-// 					target="_blank"
-// 					rel="noopener noreferrer"
-// 				>
-// 					Calculator
-// 				</a>
-// 				<MyComponent />
-// 				{/* <MyComponent />
-// 				<MyComponent /> */}
-// 				{/* <p>{today.getFullYear()}</p>  */}
-// 			</header>
-// 		</div>
-// 	);
-// };
