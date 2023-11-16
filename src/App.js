@@ -1,4 +1,3 @@
-//selection и в css 86 строка
 import styles from './App.module.css';
 import { useState } from 'react';
 
@@ -82,7 +81,7 @@ export const App = () => {
 					))}
 				</ul>
 				<ul
-					className={styles.actions} //selection и в css
+					className={styles.selection}
 					onClick={(evt) => {doOperation(evt)}}
 				>
 					<li className={styles.li} key="operator">
