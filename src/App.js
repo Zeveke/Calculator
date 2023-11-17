@@ -2,24 +2,23 @@ import styles from './App.module.css';
 import { useState } from 'react';
 
 export const App = () => {
-	const NUMS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+	const NUMS = [1, 2, 3, '-', 4, 5, 6, '+', 7, 8, 9, 'C', 0, '='];
 
 	const [value, setValue] = useState(0);
 	const [isResult, setIsResult] = useState(false);
 
 	const countResult = (countResult) => {
 		if (countResult.length) {
-
 			const selection = countResult
 				.split(' ')
 				.filter((symbol) => isFinite(symbol) === false);
 
-				const operand = countResult
+			const operand = countResult
 				.split(' ')
 				.filter((symbol) => isFinite(symbol) === true)
 				.map((number) => Number(number));
 
-				selection.forEach((select) => {
+			selection.forEach((select) => {
 				if (select === '-') {
 					const result = operand[0] - operand[1];
 					operand.splice(0, 2, result);
@@ -37,34 +36,37 @@ export const App = () => {
 		}
 	};
 
-	const addDigit = (event) => {
-		const li = event.target.closest('li');
-
-		if (li) {
+	const addCeil = (event) => {
+		if (event) {
 			setIsResult(isResult ? !isResult : false);
 			setValue((updatedValue) =>
-				updatedValue === 0 ? li.textContent : (updatedValue += li.textContent),
+				updatedValue === 0 ? event : (updatedValue += event),
 			);
 		}
-	}
+	};
 
-	const doOperation = (event) => {
-		const select = event.target.closest('li');
-						if (select.textContent !== '=') {
-							setIsResult(isResult ? !isResult : false);
-							setValue(
-								select.textContent === '-'
-									? `${value} - `
-									: select.textContent === '+'
-									? `${value} + `
-									: select.textContent === 'C'
-									? 0
-									: null,
-							);
-						} else if (select.textContent === '=') {
-							setValue(() => countResult(value));
-						}
-	}
+	const doTask = (event) => {
+		const dataValue = event.target.dataset.value;
+
+		if (isFinite(dataValue)) {
+			addCeil(dataValue);
+		} else if (!isFinite(dataValue)) {
+			if (dataValue !== '=') {
+				setIsResult(isResult ? !isResult : false);
+				setValue(
+					dataValue === '-'
+						? `${value} - `
+						: dataValue === '+'
+						  ? `${value} + `
+						  : dataValue === 'C'
+						    ? 0
+						    : false,
+				);
+			} else if (dataValue === '=') {
+				setValue(() => countResult(value));
+			}
+		}
+	};
 
 	return (
 		<div className={styles.сontainer}>
@@ -72,30 +74,15 @@ export const App = () => {
 			<div className={styles.gridContainer}>
 				<ul
 					className={styles.numbers}
-					onClick={(evt) => {addDigit(evt)}}
+					onClick={(evt) => {
+						doTask(evt);
+					}}
 				>
 					{NUMS.map((number) => (
-						<li className={styles.li} key={number}>
+						<li className={styles.li} key={number} data-value={number}>
 							{number}
 						</li>
 					))}
-				</ul>
-				<ul
-					className={styles.selection}
-					onClick={(evt) => {doOperation(evt)}}
-				>
-					<li className={styles.li} key="operator">
-						-
-					</li>
-					<li className={styles.li} key="operator">
-						+
-					</li>
-					<li className={styles.li} key="operator">
-						=
-					</li>
-					<li className={styles.li} key="operator">
-						C
-					</li>
 				</ul>
 			</div>
 		</div>
