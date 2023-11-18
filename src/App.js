@@ -74,8 +74,8 @@ export const App = () => {
 			<div className={styles.gridContainer}>
 				<ul
 					className={styles.numbers}
-					onClick={(evt) => {
-						doTask(evt);
+					onClick={(eventClick) => {
+						doTask(eventClick);
 					}}
 				>
 					{NUMS.map((number) => (
