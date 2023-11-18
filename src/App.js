@@ -7,7 +7,7 @@ export const App = () => {
 	const [value, setValue] = useState(0);
 	const [isResult, setIsResult] = useState(false);
 
-	const countResult = (countResult) => {
+	const countResultValue = (countResult) => {
 		if (countResult.length) {
 			const selection = countResult
 				.split(' ')
@@ -63,7 +63,7 @@ export const App = () => {
 						    : false,
 				);
 			} else if (dataValue === '=') {
-				setValue(() => countResult(value));
+				setValue(() => countResultValue(value));
 			}
 		}
 	};
