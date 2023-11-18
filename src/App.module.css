@@ -9,11 +9,8 @@
 }
 
 .gridContainer {
-	display: grid;
 	width: 95%;
 	margin: auto;
-	gap: 2px;
-	grid-template-columns: 100;
 }
 
 .screen {
@@ -43,9 +40,8 @@
 	grid-template-columns: auto auto auto auto;
 	grid-template-rows: auto auto auto auto;
 	padding: 0;
-	gap: 2px;
+	gap: 10px;
 }
-
 li {
 	width: auto;
 	height: 20px;
